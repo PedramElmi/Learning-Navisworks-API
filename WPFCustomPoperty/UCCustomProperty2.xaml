@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="WPFCustomPoperty.UCCustomProperty2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFCustomPoperty"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="600"
+             MinHeight="350" MinWidth="600"  >
+
+
+    <Grid x:Name="Container">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="2*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Label Grid.Row="0" Grid.Column="0" Content="Category Name:" FontSize="24" VerticalAlignment="Center"/>
+    <Label Grid.Row="1" Grid.Column="0" Content="Property Name:" FontSize="24" VerticalAlignment="Center"/>
+    <Label Grid.Row="2" Grid.Column="0" Content="Property Value:" FontSize="24" VerticalAlignment="Center"/>
+
+    <Button x:Name="buttonCreateProperty"
+                Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="100,10" Content="Create" FontSize="28" FontWeight="Bold"/>
+
+    <TextBox x:Name="textBoxCategoryName" 
+                 Grid.Row="0" Grid.Column="1" FontSize="24" Margin="5" VerticalContentAlignment="Center" FontFamily="Consolas"/>
+    <TextBox x:Name="textBoxPropertyName"
+                 Grid.Row="1" Grid.Column="1" FontSize="24" Margin="5" VerticalContentAlignment="Center" FontFamily="Consolas"/>
+    <TextBox x:Name="textBoxPropertyValue"
+                 Grid.Row="2" Grid.Column="1" FontSize="24" Margin="5" VerticalContentAlignment="Center" FontFamily="Consolas"/>
+
+
+    </Grid>
+</UserControl>
