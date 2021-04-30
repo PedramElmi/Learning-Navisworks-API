@@ -32,8 +32,6 @@ namespace LearningNavisworksAPI
                             var dockPane = (pluginRecord.LoadedPlugin ?? pluginRecord.LoadPlugin()) as DockPanePlugin;
 
                             dockPane.ActivatePane();
-
-
                         }
                     }
                     break;
