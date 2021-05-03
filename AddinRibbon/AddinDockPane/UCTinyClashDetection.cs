@@ -18,11 +18,24 @@ namespace LearningNavisworksAPI.AddinDockPane
         /// </summary>
         private Document ActiveDocument { get; } = Autodesk.Navisworks.Api.Application.ActiveDocument;
 
-        private IEnumerable<ModelItem> IntersectedItems { get; set; }
+        /// <summary>
+        /// Itesms that have intersection with selected items
+        /// </summary>
+        private ModelItemCollection IntersectedItems { get; set; } = new ModelItemCollection();
 
+        /// <summary>
+        /// Selected Items
+        /// </summary>
         private ModelItemCollection SelectedItems { get; set; }
 
+        /// <summary>
+        /// other items in the active document
+        /// </summary>
+        public ModelItemCollection OtherItems { get; set; } = new ModelItemCollection();
 
+        /// <summary>
+        /// The Constructor
+        /// </summary>
         public UCTinyClashDetection()
         {
             InitializeComponent();
@@ -54,7 +67,7 @@ namespace LearningNavisworksAPI.AddinDockPane
             // model items collection-1
             ModelItemCollection modelItemCollection = new ModelItemCollection();
             // get current selected items
-            ModelItemCollection selectedItems = new ModelItemCollection(ActiveDocument.CurrentSelection.SelectedItems);
+            this.SelectedItems = new ModelItemCollection(ActiveDocument.CurrentSelection.SelectedItems);
 
             // each model
             foreach (Model model in ActiveDocument.Models)
@@ -65,19 +78,32 @@ namespace LearningNavisworksAPI.AddinDockPane
             }
 
             var intersectedItems = from item1 in modelItemCollection
-                                   from item2 in selectedItems
+                                   from item2 in this.SelectedItems
                                    let box1 = item1.BoundingBox(true)
                                    let box2 = item2.BoundingBox(true)
                                    where box1.Intersects(box2)
                                    select item1;
 
-            this.IntersectedItems = intersectedItems;
-            this.SelectedItems = selectedItems;
 
+
+            this.IntersectedItems.CopyFrom(intersectedItems);
+
+            // Transparency of other items
+            // clear OtherItems
+            this.OtherItems.Clear();
+            // add selected items
+            OtherItems.AddRange(SelectedItems);
+            // add intersected items
+            OtherItems.AddRange(intersectedItems);
+            // invert the items!
+            OtherItems.Invert(ActiveDocument);
+            
+            
             // change the color of model item collection-2 items 
             ActiveDocument.Models.OverrideTemporaryColor(intersectedItems, Autodesk.Navisworks.Api.Color.Red);
-            ActiveDocument.Models.OverrideTemporaryColor(selectedItems, Autodesk.Navisworks.Api.Color.Green);
-
+            ActiveDocument.Models.OverrideTemporaryColor(this.SelectedItems, Autodesk.Navisworks.Api.Color.Green);
+            // Make other Items transparent
+            ActiveDocument.Models.OverrideTemporaryTransparency(OtherItems, transparency: 0.9);
 
             // enable the reset button
             button2.Enabled = true;
@@ -87,9 +113,12 @@ namespace LearningNavisworksAPI.AddinDockPane
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ActiveDocument.Models.ResetTemporaryMaterials(SelectedItems);
-            ActiveDocument.Models.ResetTemporaryMaterials(IntersectedItems);
+            // reset color and transparency
+            ActiveDocument.Models.ResetTemporaryMaterials(this.SelectedItems);
+            ActiveDocument.Models.ResetTemporaryMaterials(this.IntersectedItems);
+            ActiveDocument.Models.ResetTemporaryMaterials(this.OtherItems);
 
+            // disable the reset button
             button2.Enabled = false;
             button1.Enabled = true;
         }
