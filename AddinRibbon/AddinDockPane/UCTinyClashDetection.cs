@@ -84,8 +84,7 @@ namespace LearningNavisworksAPI.AddinDockPane
                                    where box1.Intersects(box2)
                                    select item1;
 
-
-
+            // get the result and set it to its property
             this.IntersectedItems.CopyFrom(intersectedItems);
 
             // Transparency of other items
@@ -94,16 +93,28 @@ namespace LearningNavisworksAPI.AddinDockPane
             // add selected items
             OtherItems.AddRange(SelectedItems);
             // add intersected items
-            OtherItems.AddRange(intersectedItems);
+            OtherItems.AddRange(IntersectedItems);
             // invert the items!
             OtherItems.Invert(ActiveDocument);
-            
-            
+
+
             // change the color of model item collection-2 items 
-            ActiveDocument.Models.OverrideTemporaryColor(intersectedItems, Autodesk.Navisworks.Api.Color.Red);
+            ActiveDocument.Models.OverrideTemporaryColor(IntersectedItems, Autodesk.Navisworks.Api.Color.Red);
             ActiveDocument.Models.OverrideTemporaryColor(this.SelectedItems, Autodesk.Navisworks.Api.Color.Green);
             // Make other Items transparent
             ActiveDocument.Models.OverrideTemporaryTransparency(OtherItems, transparency: 0.9);
+
+
+            // create display Text info about intersected items
+            var displayText = new StringBuilder().AppendLine(
+                "Selected Items:").AppendLine(
+                DisplayItemsProperties(SelectedItems)).AppendLine(
+                "---------------------------").AppendLine(
+                "Intersected Items:").AppendLine(
+                DisplayItemsProperties(IntersectedItems));
+            // show in the TextBox
+            textBox1.Text = displayText.ToString();
+
 
             // enable the reset button
             button2.Enabled = true;
@@ -121,6 +132,50 @@ namespace LearningNavisworksAPI.AddinDockPane
             // disable the reset button
             button2.Enabled = false;
             button1.Enabled = true;
+        }
+
+
+        private string DisplayItemsProperties(ModelItemCollection modelItems)
+        {
+            
+            string GetPropertyValue(Autodesk.Navisworks.Api.DataProperty property)
+            {
+                return property.Value.IsDisplayString ? property.Value.ToDisplayString() : property.Value.ToString();
+            }
+
+
+            // create result as list and add to it later on
+            var result = new List<string>();
+
+            // Collection of ModelItems
+            foreach (var item in modelItems)
+            {
+                // the ModelItem DisplayName
+                result.Add(item.DisplayName);
+
+                // Property Categories
+                foreach (var category in item.PropertyCategories)
+                {
+
+                    result.Add($"\t{category.DisplayName}");
+
+                    foreach (var property in category.Properties)
+                    {
+                        result.Add($"\t\t{property.DisplayName}> {GetPropertyValue(property)}");
+                    }
+
+                    // only do it once (Item Category)
+                    break;
+
+                }
+
+                result.Add(Environment.NewLine);
+
+            }
+
+            // return the result
+            return string.Join(Environment.NewLine, result);
+
         }
     }
 }

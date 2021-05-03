@@ -265,38 +265,7 @@ namespace LearningNavisworksAPI.AddinDockPane
         private void buttonSaveXmlData_Click(object sender, EventArgs e)
         {
 
-            //var answer = new List<Agent>();
-            //StringBuilder answer2 = new StringBuilder();
-
-            //foreach (var item in ActiveDocument.CurrentSelection.SelectedItems)
-            //{
-            //    answer.Add(new Agent(item));
-            //    if (item.InstanceGuid == Guid.Empty)
-            //    {
-            //        answer2.Append("Is GUID Empty - ");
-            //    }
-
-                
-
-            //}
-
-
-            //MessageBox.Show(answer.ToString());
-            //MessageBox.Show(answer2.ToString());
-  
-            
-            
-            //var filePath = @"C:\Users\ASUS  ROG  G731GV\Desktop\data.json";
-
-            //try
-            //{
-            //    DataSerializer<ModelItemCollection>.JsonSerialize(ActiveDocument.CurrentSelection.SelectedItems, filePath);
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    MessageBox.Show($"{ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}{ex.Data}");
-            //}
+            // will be added later
 
         }
     }
