@@ -11,7 +11,7 @@ namespace LearningNavisworksAPI.AddinDockPane
 {
 
     [Plugin(name: "SecondDockPanePlugin", developerId: "PDEL", DisplayName = "Pedram Second Tool Panel")]
-    [DockPanePlugin(preferredWidth: 600, preferredHeight: 350, AutoScroll = false, FixedSize = true, MinimumHeight = 350, MinimumWidth = 600)]
+    [DockPanePlugin(preferredWidth: 350, preferredHeight: 150, AutoScroll = false, FixedSize = false, MinimumHeight = 150, MinimumWidth = 250)]
     class SecondDockPanePlugin : DockPanePlugin
     {
 
@@ -29,9 +29,24 @@ namespace LearningNavisworksAPI.AddinDockPane
 
             elementHost.CreateControl();
 
+            elementHost.ParentChanged += this.ElementHost_ParentChanged;
+
 
             //return the ElementHost
             return elementHost;
+        }
+
+        /// <summary>
+        /// Resizing DockPane implies resizing WPF-based ElementHost
+        /// </summary>
+        /// <param name="sender">ElementHost</param>
+        /// <param name="e"></param>
+        private void ElementHost_ParentChanged(object sender, EventArgs e)
+        {
+            if (sender is ElementHost elementHost)
+            {
+                elementHost.Dock = DockStyle.Fill;
+            }
         }
 
         public override void DestroyControlPane(Control pane)
