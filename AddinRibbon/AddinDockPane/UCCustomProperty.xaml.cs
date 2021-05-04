@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Autodesk.Navisworks.Api;
+using Autodesk.Navisworks.Api.ComApi;
+using Autodesk.Navisworks.Api.Interop.ComApi;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Autodesk.Navisworks.Api;
-using Autodesk.Navisworks.Api.Interop.ComApi;
-using Autodesk.Navisworks.Api.ComApi;
 
 namespace LearningNavisworksAPI.AddinDockPane
 {
@@ -29,6 +17,9 @@ namespace LearningNavisworksAPI.AddinDockPane
         /// </summary>
         public Document ActiveDocument { get; set; } = Autodesk.Navisworks.Api.Application.ActiveDocument;
 
+        /// <summary>
+        /// current doc in COM
+        /// </summary>
         public InwOpState10 DocumentCOM { get; set; } = ComApiBridge.State;
 
         public UCCustomProperty()
@@ -38,47 +29,131 @@ namespace LearningNavisworksAPI.AddinDockPane
 
         private void buttonCreateProperty_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"{textBoxCategoryName.Text}{Environment.NewLine}{textBoxPropertyName.Text}{Environment.NewLine}{textBoxPropertyValue.Text}");
 
             if (ActiveDocument.CurrentSelection.SelectedItems.Count > 0)
             {
 
-                foreach (var modelItem in ActiveDocument.CurrentSelection.SelectedItems)
+                foreach (ModelItem modelItem in ActiveDocument.CurrentSelection.SelectedItems)
                 {
 
-                    // conver ModelItem to COM Path
-                    InwOaPath comModelItem = ComApiBridge.ToInwOaPath(modelItem);
+                    // convert ModelItem to COM Path
+                    var comModelItem = ComApiBridge.ToInwOaPath(modelItem);
 
-                    // get ModelItem's PropertyCategoryCollection
+                    // get ModelItem's PropertyCategoryCollection object
                     var comPropertyCategoryCollection = DocumentCOM.GetGUIPropertyNode(comModelItem, true) as InwGUIPropertyNode2;
 
-                    // create a new category (PropertyDataCollection)
-                    var newCategory = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec,null,null) as InwOaPropertyVec;
+                    // get ModelItem's PropertyCategoryCollection data
+                    InwGUIAttributesColl comPropertyCollection = comPropertyCategoryCollection.GUIAttributes();
 
-                    // create a new property (PropertyData)
-                    var newProperty = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null) as InwOaProperty;
+                    //
+                    bool foundMatchCategory = false;
 
-                    // set PropertyName
-                    newProperty.name = textBoxPropertyName.Text + "_InternalName";
+                    // loop PropertyCategory
+                    foreach (InwGUIAttribute2 propertyCategory in comPropertyCollection)
+                    {
 
-                    // set PropertyDisplayName
-                    newProperty.UserName = textBoxPropertyName.Text;
+                        // if category's name match
+                        if (propertyCategory.UserDefined && propertyCategory.ClassUserName == textBoxCategoryName.Text)
+                        {
+                            // found a category
+                            foundMatchCategory = true;
 
-                    // set PropertyValue
-                    newProperty.value = textBoxPropertyValue.Text;
+                            // overwritten existing PropertyCategory with newly created PropertyCategory (existing + new)
+                            // ndx = “0” is to create new PropertyCategory, “1” is to overwrite existing PropertyCategory
+                            comPropertyCategoryCollection.SetUserDefined(
+                                ndx: 1,
+                                textBoxCategoryName.Text,
+                                textBoxCategoryName.Text + "_InternalName",
+                                AddNewPropertyToNewOrExistingCategory(propertyCategory));
 
-                    // add PropertyData to Category
-                    newCategory.Properties().Add(newProperty);
+                            if (foundMatchCategory)
+                            {
+                                break;
+                            }
 
-                    // add CategoryData to ModelItem's CategoryDataCollection
-                    comPropertyCategoryCollection.SetUserDefined(0, textBoxCategoryName.Text, textBoxCategoryName.Text + "_InternalName", newCategory);
+                        }
 
+                    }
 
+                    if (!foundMatchCategory)
+                    {
+                        // create a new category (PropertyDataCollection)
+                        var newCategory = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null) as InwOaPropertyVec;
+
+                        // create a new propertydata and add to category
+                        // create a new property (PropertyData)
+                        var newProperty = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null) as InwOaProperty;
+
+                        // set PropertyName
+                        newProperty.name = textBoxPropertyName.Text + "_InternalName";
+
+                        // set PropertyDisplayName
+                        newProperty.UserName = textBoxPropertyName.Text;
+
+                        // set PropertyValue
+                        newProperty.value = textBoxPropertyValue.Text;
+
+                        // add PropertyData to Category
+                        newCategory.Properties().Add(newProperty);
+
+                        comPropertyCategoryCollection.SetUserDefined(
+                                    0,
+                                    textBoxCategoryName.Text,
+                                    textBoxCategoryName.Text + "_InternalName",
+                                    newCategory);
+                    }
 
                 }
 
             }
 
+        }
+
+        private InwOaPropertyVec AddNewPropertyToNewOrExistingCategory(InwGUIAttribute2 propertyCategory)
+        {
+            // create a new category (PropertyDataCollection)
+            var newCategory = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null) as InwOaPropertyVec;
+
+
+            // retrieve existing PropertyData (name & value) and add to category
+            foreach (InwOaProperty property in propertyCategory.Properties())
+            {
+
+                // create a new property (PropertyData)
+                var existingProperty = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null) as InwOaProperty;
+
+                // set property name
+                existingProperty.name = property.name;
+
+                // set property display name
+                existingProperty.UserName = property.UserName;
+
+                // set property value
+                existingProperty.value = property.value;
+
+                // add to category
+                newCategory.Properties().Add(existingProperty);
+
+            }
+
+
+            // create a new propertydata and add to category
+            // create a new property (PropertyData)
+            var newProperty = DocumentCOM.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null) as InwOaProperty;
+
+            // set PropertyName
+            newProperty.name = textBoxPropertyName.Text + "_InternalName";
+
+            // set PropertyDisplayName
+            newProperty.UserName = textBoxPropertyName.Text;
+
+            // set PropertyValue
+            newProperty.value = textBoxPropertyValue.Text;
+
+            // add PropertyData to Category
+            newCategory.Properties().Add(newProperty);
+
+            return newCategory;
         }
     }
 }
