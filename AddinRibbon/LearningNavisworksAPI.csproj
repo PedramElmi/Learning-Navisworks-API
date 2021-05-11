@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\Plugins\LearningNavisworksAPI\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Plugins\LearningNavisworksAPI\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -38,24 +38,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdWindows">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\AdWindows.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\AdWindows.dll</HintPath>
     </Reference>
     <Reference Include="Autodesk.Navisworks.Api">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\Autodesk.Navisworks.Api.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Automation">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Automation.dll</HintPath>
     </Reference>
     <Reference Include="Autodesk.Navisworks.ComApi">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Autodesk.Navisworks.Interop.ComApi">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="navisworks.gui.roamer">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\navisworks.gui.roamer.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\navisworks.gui.roamer.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2021\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2022\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

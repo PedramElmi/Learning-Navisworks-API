@@ -123,6 +123,7 @@ namespace LearningNavisworksAPI.AddinDockPane
                                     && GetPropertyValue(modelItemFoundedByCategory.Properties.FindPropertyByDisplayName(textBoxPropertyName.Text)) == textBoxPropertyValue.Text
                                     select modelItem;
 
+
             // Finish Query and store it in a list
             var searchResult = new List<ModelItem>(querySearchResult);
 

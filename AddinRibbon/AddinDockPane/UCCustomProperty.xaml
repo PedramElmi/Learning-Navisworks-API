@@ -1,8 +1,8 @@
-﻿ <!--Tutorial:
+﻿<!--Tutorial:
     First: https://twentytwo.space/2020/05/16/navisworks-api-find-intersect-and-override-color
     Second: https://twentytwo.space/2020/12/19/navisworks-api-adding-property-to-existing-category/
     -->
-    <UserControl x:Class="LearningNavisworksAPI.AddinDockPane.UCCustomProperty"
+<UserControl x:Class="LearningNavisworksAPI.AddinDockPane.UCCustomProperty"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,7 @@
              MinHeight="150" MinWidth="250"  
              >
 
-    <Grid x:Name="Container">
+    <Grid x:Name="Container" Margin="0,0,-12,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
