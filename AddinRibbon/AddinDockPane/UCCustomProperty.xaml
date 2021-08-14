@@ -13,10 +13,10 @@
              MinHeight="150" MinWidth="250"  
              >
 
-    <Grid x:Name="Container" Margin="0,0,-12,0">
+    <Grid x:Name="Container">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
