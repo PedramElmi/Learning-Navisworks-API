@@ -91,6 +91,10 @@ namespace LearningNavisworksAPI.AddinDockPane
             // loop each model and do the update
             foreach (var model in activeDocument.Models)
             {
+                if (model is null)
+                {
+                    return;
+                }
                 // having the current model file object
                 var currentInfo = new FileInfo(model.SourceFileName);
 
